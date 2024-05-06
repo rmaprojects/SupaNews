@@ -13,6 +13,9 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.realtime.RealtimeChannel
+import io.github.jan.supabase.realtime.channel
 import javax.inject.Singleton
 
 @Module
@@ -28,7 +31,16 @@ object AppModule {
         ) {
             install(Auth)
             install(Postgrest)
+            install(Realtime)
         }
+    }
+
+    @Provides
+    @Singleton
+    fun providesRealtimeChannel(
+        client: SupabaseClient
+    ): RealtimeChannel {
+        return client.channel("newsfeed")
     }
 
     @Provides

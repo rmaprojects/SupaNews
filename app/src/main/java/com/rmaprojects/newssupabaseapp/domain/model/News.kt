@@ -5,5 +5,6 @@ data class News(
     val content: String,
     val headerImgUrl: String,
     val authorUsername: String,
-    val authorId: String
+    val authorId: String,
+    val newsId: Int? = null,
 )

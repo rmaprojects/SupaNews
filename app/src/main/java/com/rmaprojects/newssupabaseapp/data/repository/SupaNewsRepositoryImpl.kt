@@ -8,6 +8,7 @@ import com.rmaprojects.newssupabaseapp.domain.repository.SupaNewsRepository
 import com.rmaprojects.newssupabaseapp.utils.mapToEntity
 import com.rmaprojects.newssupabaseapp.utils.mapToNews
 import com.rmaprojects.newssupabaseapp.utils.saveToLocalPreference
+import io.github.jan.supabase.realtime.RealtimeChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -80,4 +81,7 @@ class SupaNewsRepositoryImpl @Inject constructor(
                 emit(ResponseState.Error(e.toString()))
             }
         }
+
+    override val newsRealtimeChannel: RealtimeChannel
+        get() = TODO("Not yet implemented")
 }

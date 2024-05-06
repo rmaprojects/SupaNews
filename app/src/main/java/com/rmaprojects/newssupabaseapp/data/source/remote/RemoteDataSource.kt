@@ -9,6 +9,10 @@ import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.result.PostgrestResult
+import io.github.jan.supabase.realtime.PostgresAction
+import io.github.jan.supabase.realtime.channel
+import io.github.jan.supabase.realtime.postgresChangeFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import javax.inject.Inject
@@ -16,7 +20,6 @@ import javax.inject.Inject
 class RemoteDataSource @Inject constructor(
     private val client: SupabaseClient
 ) {
-
     suspend fun loginUser(
         email: String,
         password: String
@@ -63,5 +66,4 @@ class RemoteDataSource @Inject constructor(
             }
         }.decodeSingle()
     }
-
 }

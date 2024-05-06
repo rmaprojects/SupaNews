@@ -80,6 +80,7 @@ dependencies {
     implementation(platform(libs.supabase.bom))
     implementation(libs.supabase.postgrest)
     implementation(libs.supabase.gotrue)
+    implementation(libs.supabase.realtime)
 
     //Dagger-Hilt
     ksp(libs.hilt.android.compiler)

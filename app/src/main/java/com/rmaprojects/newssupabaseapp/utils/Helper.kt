@@ -11,7 +11,8 @@ fun NewsEntity.mapToNews(): News {
         this.contentNews,
         this.headerImgNews,
         this.authorUsername,
-        this.authorId
+        this.authorId,
+        this.newsId
     )
 }
 

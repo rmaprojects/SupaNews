@@ -1,4 +1,4 @@
-package com.rmaprojects.newssupabaseapp.domain.usecases
+package com.rmaprojects.newssupabaseapp.domain.usecases.auth
 
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
