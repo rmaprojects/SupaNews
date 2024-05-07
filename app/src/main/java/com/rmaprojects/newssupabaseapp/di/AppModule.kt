@@ -37,14 +37,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesRealtimeChannel(
-        client: SupabaseClient
-    ): RealtimeChannel {
-        return client.channel("newsfeed")
-    }
-
-    @Provides
-    @Singleton
     fun provideRemoteDataSource(
         client: SupabaseClient
     ): RemoteDataSource {
@@ -54,9 +46,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRepository(
-        remoteDataSource: RemoteDataSource
+        remoteDataSource: RemoteDataSource,
+        client: SupabaseClient
     ): SupaNewsRepository {
-        return SupaNewsRepositoryImpl(remoteDataSource)
+        return SupaNewsRepositoryImpl(remoteDataSource, client)
     }
 
     @Provides

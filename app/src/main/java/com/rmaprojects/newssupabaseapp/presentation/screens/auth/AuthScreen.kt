@@ -15,14 +15,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 import com.rmaprojects.apirequeststate.ResponseState
+import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.AuthScreenDestination
+import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.NewsFeedScrenDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@RootNavGraph(start = true)
+@RootNavGraph(true)
+@Destination
 fun AuthScreen(
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
 
     var currentContent by rememberSaveable {
@@ -71,7 +78,14 @@ fun AuthScreen(
                 onLoginClick = {
                     viewModel.performLogin(email, password)
                 },
-                loginState = loginState
+                loginState = loginState,
+                onSuccessLogin = {
+                    navigator.navigate(NewsFeedScrenDestination) {
+                        popUpTo(AuthScreenDestination) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 
@@ -98,7 +112,14 @@ fun AuthScreen(
                 onRegisterClick = {
                     viewModel.performRegister(username, email, password)
                 },
-                registerState = registerState
+                registerState = registerState,
+                onSuccessRegistration = {
+                    navigator.navigate(NewsFeedScrenDestination) {
+                        popUpTo(AuthScreenDestination) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 

@@ -4,28 +4,7 @@ import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
 import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsEntity
 import com.rmaprojects.newssupabaseapp.data.source.remote.model.UsersEntity
 import com.rmaprojects.newssupabaseapp.domain.model.News
-
-fun NewsEntity.mapToNews(): News {
-    return News(
-        this.titleNews,
-        this.contentNews,
-        this.headerImgNews,
-        this.authorUsername,
-        this.authorId,
-        this.newsId
-    )
-}
-
-fun News.mapToEntity(userUuid: String): NewsEntity {
-    val username = LocalUser.username ?: ""
-    return NewsEntity(
-        userUuid,
-        username,
-        this.title,
-        this.content,
-        this.headerImgUrl
-    )
-}
+import kotlinx.serialization.json.JsonObject
 
 fun UsersEntity.saveToLocalPreference(): LocalUser {
     return LocalUser.apply {

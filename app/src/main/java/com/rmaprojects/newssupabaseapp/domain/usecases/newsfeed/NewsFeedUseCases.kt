@@ -1,14 +1,18 @@
 package com.rmaprojects.newssupabaseapp.domain.usecases.newsfeed
 
-import com.rmaprojects.apirequeststate.ResponseState
-import com.rmaprojects.newssupabaseapp.domain.model.News
+import android.util.Log
+import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsEntity
 import com.rmaprojects.newssupabaseapp.domain.repository.SupaNewsRepository
 import kotlinx.coroutines.flow.Flow
 
-class FetchNewsFeed(
+class NewsFeedUseCases(
     private val repository: SupaNewsRepository
 ) {
-    operator fun invoke(): Flow<ResponseState<List<News>>> {
+    suspend fun fetchAllNews(): Result<Flow<List<NewsEntity>>> {
         return repository.getAllNews()
+    }
+
+    suspend fun unsubscribeChannel() {
+        repository.unsubscribeChannel()
     }
 }

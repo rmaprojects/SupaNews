@@ -21,6 +21,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
@@ -35,7 +36,8 @@ fun RegisterContent(
     onUsernameChanged: (String) -> Unit,
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit,
-    registerState: State<ResponseState<LocalUser>>
+    registerState: State<ResponseState<LocalUser>>,
+    onSuccessRegistration: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -47,17 +49,58 @@ fun RegisterContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        OutlinedTextField(value = username, onValueChange = onUsernameChanged)
+        Text(
+            text = "New with us?",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "Register to join with us!",
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Spacer(modifier = Modifier.height(18.dp))
+        OutlinedTextField(
+            maxLines = 1,
+            modifier = Modifier.fillMaxWidth(),
+            value = username,
+            onValueChange = onUsernameChanged,
+            placeholder = {
+                Text(text = "Username")
+            }
+        )
         Spacer(modifier = Modifier.height(12.dp))
-        OutlinedTextField(value = email, onValueChange = onEmailChanged)
+        OutlinedTextField(
+            maxLines = 1,
+            modifier = Modifier.fillMaxWidth(),
+            value = email,
+            onValueChange = onEmailChanged,
+            placeholder = {
+                Text(text = "Email")
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(value = password, onValueChange = onPasswordChanged)
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = password,
+            onValueChange = onPasswordChanged,
+            placeholder = {
+                Text(text = "Password")
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onRegisterClick, enabled = !registerState.value.isLoading()) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onRegisterClick,
+            enabled = !registerState.value.isLoading()
+        ) {
             Text(text = "Register")
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = onLoginClick, enabled = !registerState.value.isLoading()) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onLoginClick,
+            enabled = !registerState.value.isLoading()
+        ) {
             Text(text = "Login")
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -67,6 +110,7 @@ fun RegisterContent(
             },
             onSuccess = {
                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
+                onSuccessRegistration()
             },
             onError = {
                 Card(
@@ -76,7 +120,9 @@ fun RegisterContent(
                     )
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
                     ) {
                         Text(text = it)
                     }

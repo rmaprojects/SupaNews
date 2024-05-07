@@ -21,6 +21,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
@@ -33,7 +34,8 @@ fun LoginContent(
     onPasswordChanged: (String) -> Unit,
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit,
-    loginState: State<ResponseState<LocalUser>>
+    loginState: State<ResponseState<LocalUser>>,
+    onSuccessLogin: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -45,15 +47,45 @@ fun LoginContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        OutlinedTextField(value = email, onValueChange = onEmailChanged)
+        Text(
+            text = "Welcome Back!",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(18.dp))
+        OutlinedTextField(
+            maxLines = 1,
+            modifier = Modifier.fillMaxWidth(),
+            value = email,
+            onValueChange = onEmailChanged,
+            placeholder = {
+                Text(text = "Email")
+            }
+        )
         Spacer(modifier = Modifier.height(12.dp))
-        OutlinedTextField(value = password, onValueChange = onPasswordChanged)
+        OutlinedTextField(
+            maxLines = 1,
+            modifier = Modifier.fillMaxWidth(),
+            value = password,
+            onValueChange = onPasswordChanged,
+            placeholder = {
+                Text(text = "Password")
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onLoginClick, enabled = !loginState.value.isLoading()) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onLoginClick,
+            enabled = !loginState.value.isLoading()
+        ) {
             Text(text = "Login")
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = onRegisterClick, enabled = !loginState.value.isLoading()) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onRegisterClick,
+            enabled = !loginState.value.isLoading()
+        ) {
             Text(text = "Register")
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -63,6 +95,7 @@ fun LoginContent(
             },
             onSuccess = {
                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
+                onSuccessLogin()
             },
             onError = {
                 Card(
@@ -72,7 +105,9 @@ fun LoginContent(
                     )
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
                     ) {
                         Text(text = it)
                     }

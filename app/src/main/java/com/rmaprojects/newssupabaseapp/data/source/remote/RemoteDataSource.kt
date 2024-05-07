@@ -9,10 +9,6 @@ import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.result.PostgrestResult
-import io.github.jan.supabase.realtime.PostgresAction
-import io.github.jan.supabase.realtime.channel
-import io.github.jan.supabase.realtime.postgresChangeFlow
-import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import javax.inject.Inject
@@ -45,10 +41,6 @@ class RemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getAllNews(): List<NewsEntity> {
-        return client.postgrest[SupabaseTables.NEWS_TABLE].select().decodeList()
-    }
-
     suspend fun insertNews(
         newNews: NewsEntity
     ): PostgrestResult {
@@ -62,7 +54,7 @@ class RemoteDataSource @Inject constructor(
     suspend fun getUserFromTable(uuid: String): UsersEntity {
         return client.postgrest[SupabaseTables.USER_TABLE].select {
             filter {
-                UsersEntity::uuid eq uuid
+                UsersEntity::id eq uuid
             }
         }.decodeSingle()
     }

@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     //Ktor
-    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.okhttp)
 
     //Supabase
     implementation(platform(libs.supabase.bom))
@@ -97,4 +97,7 @@ dependencies {
 
     //ApiResponseWrapper
     implementation (libs.apiresponsewrapper)
+
+    //Coil Compose
+    implementation(libs.coil.compose)
 }

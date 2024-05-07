@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UsersEntity(
-    @SerialName("id") val uuid: String,
+    @SerialName("id") val id: String,
     @SerialName("username") val username: String,
     @SerialName("bio") val bio: String? = "",
     @SerialName("image_url") val imageUrl: String? = null,

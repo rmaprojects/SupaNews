@@ -3,23 +3,17 @@ package com.rmaprojects.newssupabaseapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
-import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsEntity
-import com.rmaprojects.newssupabaseapp.data.source.remote.tables.SupabaseTables
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
+import com.rmaprojects.newssupabaseapp.presentation.screens.NavGraphs
+import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.AuthScreenDestination
+import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.NewsFeedScrenDestination
 import com.rmaprojects.newssupabaseapp.ui.theme.SupaNewsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.postgrest.postgrest
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -34,7 +28,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    DestinationsNavHost(
+                        navGraph = NavGraphs.root,
+                        startRoute = if (LocalUser.username.isNullOrEmpty()) AuthScreenDestination else NewsFeedScrenDestination
+                    )
                 }
             }
         }
