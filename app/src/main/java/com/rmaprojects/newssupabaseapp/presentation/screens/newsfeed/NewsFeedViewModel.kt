@@ -21,14 +21,16 @@ class NewsFeedViewModel @Inject constructor(
     private val useCases: SupaNewsUseCases
 ) : ViewModel() {
 
-    private val _newsFeedState = MutableStateFlow<ResponseState<List<NewsEntity>>>(
-        ResponseState.Loading
-    )
-    val newsFeedState = _newsFeedState.asStateFlow().stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        ResponseState.Loading
-    )
+    private val _newsFeedState =
+        MutableStateFlow<ResponseState<List<NewsEntity>>>(
+            ResponseState.Loading
+        )
+    val newsFeedState =
+        _newsFeedState.asStateFlow().stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            ResponseState.Loading
+        )
 
     fun connectToRealtime() {
         viewModelScope.launch(Dispatchers.IO) {

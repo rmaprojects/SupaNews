@@ -1,22 +1,24 @@
 package com.rmaprojects.newssupabaseapp.data.repository
 
+import android.util.Log
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
 import com.rmaprojects.newssupabaseapp.data.source.remote.RemoteDataSource
+import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsArticleDto
 import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsEntity
 import com.rmaprojects.newssupabaseapp.data.source.remote.tables.SupabaseTables
-import com.rmaprojects.newssupabaseapp.domain.model.News
 import com.rmaprojects.newssupabaseapp.domain.repository.SupaNewsRepository
 import com.rmaprojects.newssupabaseapp.utils.saveToLocalPreference
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresListDataFlow
+import io.github.jan.supabase.realtime.postgresSingleDataFlow
 import io.github.jan.supabase.realtime.realtime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import okhttp3.Dispatcher
+import okhttp3.Response
 import javax.inject.Inject
 
 class SupaNewsRepositoryImpl @Inject constructor(
@@ -25,17 +27,31 @@ class SupaNewsRepositoryImpl @Inject constructor(
 ) : SupaNewsRepository {
 
     private val newsFeedChannel = client.channel("newsFeed")
+    private val newsDetailChannel = client.channel("newsDetail")
 
     override suspend fun getAllNews(): Result<Flow<List<NewsEntity>>> {
         val data = newsFeedChannel.postgresListDataFlow(
             schema = "public",
             table = SupabaseTables.NEWS_TABLE,
-            primaryKey = NewsEntity::id
+            primaryKey = NewsEntity::id,
         ).flowOn(Dispatchers.IO)
 
         newsFeedChannel.subscribe()
 
         return Result.success(data)
+    }
+
+    override suspend fun getNewsArticle(newsId: Int): Flow<ResponseState<NewsArticleDto>> = flow {
+        emit(ResponseState.Loading)
+        try {
+            emit(
+                ResponseState.Success(
+                    remoteDataSource.getNewsArticle(newsId)
+                )
+            )
+        } catch (e: Exception) {
+            emit(ResponseState.Error(e.message.toString()))
+        }
     }
 
     override fun insertNews(news: NewsEntity): Flow<ResponseState<Boolean>> =
@@ -54,9 +70,14 @@ class SupaNewsRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun unsubscribeChannel() {
+    override suspend fun unsubscribeNewsFeedChannel() {
         newsFeedChannel.unsubscribe()
         client.realtime.removeChannel(newsFeedChannel)
+    }
+
+    override suspend fun unsubscribeNewsDetailChannel() {
+        newsDetailChannel.unsubscribe()
+        client.realtime.removeChannel(newsDetailChannel)
     }
 
     override fun registerUser(
@@ -67,16 +88,16 @@ class SupaNewsRepositoryImpl @Inject constructor(
         flow {
             emit(ResponseState.Loading)
             try {
-                val result = remoteDataSource.registerUser(username, email, password)
-                if (result != null) {
-                    val registeredUser =
-                        remoteDataSource.getUserFromTable(result.id).saveToLocalPreference()
-                    emit(ResponseState.Success(registeredUser))
-                } else {
-                    emit(ResponseState.Error("Register User error"))
+                remoteDataSource.registerUser(username, email, password)?.let { userInfo ->
+                    emit(
+                        ResponseState.Success(
+                            remoteDataSource.getUserFromTable(userInfo.id).saveToLocalPreference()
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 emit(ResponseState.Error(e.message.toString()))
+                Log.d("REGISTER_ERROR", e.toString())
             }
         }
 
@@ -84,14 +105,17 @@ class SupaNewsRepositoryImpl @Inject constructor(
         flow {
             emit(ResponseState.Loading)
             try {
-                val result = remoteDataSource.loginUser(email, password)
-                if (result != null) {
-                    val loggedInUser =
-                        remoteDataSource.getUserFromTable(result.id).saveToLocalPreference()
-                    emit(ResponseState.Success(loggedInUser))
+                remoteDataSource.loginUser(email, password)?.let { userInfo ->
+                    emit(
+                        ResponseState.Success(
+                            remoteDataSource.getUserFromTable(userInfo.id).saveToLocalPreference()
+
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 emit(ResponseState.Error(e.message.toString()))
+                Log.d("LOGIN_ERROR", e.toString())
             }
         }
 }

@@ -21,7 +21,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.AuthScreenDestination
-import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.NewsFeedScrenDestination
+import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.NewsFeedScreenDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +80,7 @@ fun AuthScreen(
                 },
                 loginState = loginState,
                 onSuccessLogin = {
-                    navigator.navigate(NewsFeedScrenDestination) {
+                    navigator.navigate(NewsFeedScreenDestination) {
                         popUpTo(AuthScreenDestination) {
                             inclusive = true
                         }
@@ -114,7 +114,7 @@ fun AuthScreen(
                 },
                 registerState = registerState,
                 onSuccessRegistration = {
-                    navigator.navigate(NewsFeedScrenDestination) {
+                    navigator.navigate(NewsFeedScreenDestination) {
                         popUpTo(AuthScreenDestination) {
                             inclusive = true
                         }

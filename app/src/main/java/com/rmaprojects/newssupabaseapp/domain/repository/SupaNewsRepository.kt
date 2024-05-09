@@ -2,10 +2,8 @@ package com.rmaprojects.newssupabaseapp.domain.repository
 
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
+import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsArticleDto
 import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsEntity
-import com.rmaprojects.newssupabaseapp.data.source.remote.model.UsersEntity
-import com.rmaprojects.newssupabaseapp.domain.model.News
-import io.github.jan.supabase.realtime.RealtimeChannel
 import kotlinx.coroutines.flow.Flow
 
 interface SupaNewsRepository {
@@ -20,8 +18,9 @@ interface SupaNewsRepository {
     ): Flow<ResponseState<LocalUser>>
 
     suspend fun getAllNews(): Result<Flow<List<NewsEntity>>>
-
     fun insertNews(news: NewsEntity): Flow<ResponseState<Boolean>>
 
-    suspend fun unsubscribeChannel()
+    suspend fun unsubscribeNewsFeedChannel()
+    suspend fun getNewsArticle(newsId: Int): Flow<ResponseState<NewsArticleDto>>
+    suspend fun unsubscribeNewsDetailChannel()
 }

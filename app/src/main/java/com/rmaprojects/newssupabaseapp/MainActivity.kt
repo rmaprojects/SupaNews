@@ -11,7 +11,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
 import com.rmaprojects.newssupabaseapp.presentation.screens.NavGraphs
 import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.AuthScreenDestination
-import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.NewsFeedScrenDestination
+import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.NewsFeedScreenDestination
 import com.rmaprojects.newssupabaseapp.ui.theme.SupaNewsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     DestinationsNavHost(
                         navGraph = NavGraphs.root,
-                        startRoute = if (LocalUser.username.isNullOrEmpty()) AuthScreenDestination else NewsFeedScrenDestination
+                        startRoute = if (LocalUser.username.isNullOrEmpty()) AuthScreenDestination else NewsFeedScreenDestination
                     )
                 }
             }

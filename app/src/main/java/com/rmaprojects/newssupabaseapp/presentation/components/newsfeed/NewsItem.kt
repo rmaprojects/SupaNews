@@ -17,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.rmaprojects.newssupabaseapp.R
 
 @Composable
 fun NewsItem(
@@ -35,23 +37,22 @@ fun NewsItem(
         onClick = onItemClicked,
         modifier = modifier
     ) {
+        if (headerImg != null) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(156.dp),
+                model = headerImg,
+                contentDescription = title,
+                contentScale = ContentScale.Crop,
+                fallback = painterResource(id = R.drawable.no_img)
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-
-            if (!headerImg.isNullOrEmpty()) {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(128.dp),
-                    contentScale = ContentScale.Crop,
-                    model = headerImg,
-                    contentDescription = title
-                )
-                Spacer(modifier = Modifier.height(18.dp))
-            }
             Text(
                 text = title,
                 fontWeight = FontWeight.SemiBold,

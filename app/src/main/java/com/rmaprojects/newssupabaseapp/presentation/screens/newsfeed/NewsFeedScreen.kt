@@ -36,12 +36,13 @@ import com.rmaprojects.newssupabaseapp.presentation.screens.destinations.AddNews
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Destination
-fun NewsFeedScren(
+fun NewsFeedScreen(
     navigator: DestinationsNavigator,
     viewModel: NewsFeedViewModel = hiltViewModel()
 ) {
 
-    val newsFeedState = viewModel.newsFeedState.collectAsStateWithLifecycle()
+    val newsFeedState =
+        viewModel.newsFeedState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.connectToRealtime()
@@ -82,13 +83,13 @@ fun NewsFeedScren(
                     CircularProgressIndicator()
                 }
             },
-            onError = { message ->
+            onError = {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(message)
+                    Text(it)
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(onClick = { viewModel.connectToRealtime() }) {
                         Text(text = "Retry?")
@@ -116,6 +117,7 @@ fun NewsFeedScren(
                                 title = news.title,
                                 content = news.content,
                                 author = if (news.authorId == null) "${news.authorUsername} [DELETED]" else news.authorUsername,
+                                headerImg = news.headerImgUrl,
                                 onItemClicked = { /*TODO*/ }
                             )
                         }

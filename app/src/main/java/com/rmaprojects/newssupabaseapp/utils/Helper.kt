@@ -8,6 +8,7 @@ import kotlinx.serialization.json.JsonObject
 
 fun UsersEntity.saveToLocalPreference(): LocalUser {
     return LocalUser.apply {
+        this.uuid = this@saveToLocalPreference.id
         this.bio = this@saveToLocalPreference.bio ?: ""
         this.imageUrl = this@saveToLocalPreference.imageUrl
         this.username = this@saveToLocalPreference.username

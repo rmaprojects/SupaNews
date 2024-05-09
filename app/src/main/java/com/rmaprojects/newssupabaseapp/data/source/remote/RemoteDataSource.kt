@@ -1,5 +1,6 @@
 package com.rmaprojects.newssupabaseapp.data.source.remote
 
+import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsArticleDto
 import com.rmaprojects.newssupabaseapp.data.source.remote.model.NewsEntity
 import com.rmaprojects.newssupabaseapp.data.source.remote.model.UsersEntity
 import com.rmaprojects.newssupabaseapp.data.source.remote.tables.SupabaseTables
@@ -8,6 +9,7 @@ import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.result.PostgrestResult
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -32,13 +34,15 @@ class RemoteDataSource @Inject constructor(
         email: String,
         password: String,
     ): UserInfo? {
-        return client.auth.signUpWith(Email) {
+        client.auth.signUpWith(Email) {
             this.email = email
             this.password = password
             data = buildJsonObject {
                 put("username", username)
             }
         }
+
+        return client.auth.currentUserOrNull()
     }
 
     suspend fun insertNews(
@@ -52,9 +56,18 @@ class RemoteDataSource @Inject constructor(
     }
 
     suspend fun getUserFromTable(uuid: String): UsersEntity {
-        return client.postgrest[SupabaseTables.USER_TABLE].select {
+        return client.postgrest[SupabaseTables.USER_TABLE]
+            .select {
+                filter {
+                    UsersEntity::id eq uuid
+                }
+            }.decodeSingle()
+    }
+
+    suspend fun getNewsArticle(newsId: Int): NewsArticleDto {
+        return client.postgrest[SupabaseTables.NEWS_VIEW].select {
             filter {
-                UsersEntity::id eq uuid
+                NewsArticleDto::id eq newsId
             }
         }.decodeSingle()
     }

@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.0"
-apiresponsewrapper = "1.5"
+apiresponsewrapper = "1.7"
 coilCompose = "2.6.0"
 composedestinations = "1.9.63"
 hiltNavigationCompose = "1.2.0"

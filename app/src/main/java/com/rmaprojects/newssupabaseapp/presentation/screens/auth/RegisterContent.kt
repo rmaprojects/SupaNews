@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rmaprojects.apirequeststate.ResponseState
 import com.rmaprojects.newssupabaseapp.data.source.local.LocalUser
+import com.rmaprojects.newssupabaseapp.presentation.components.common.ErrorBox
 
 @Composable
 fun RegisterContent(
@@ -113,20 +114,7 @@ fun RegisterContent(
                 onSuccessRegistration()
             },
             onError = {
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(text = it)
-                    }
-                }
+                ErrorBox(message = it)
             }
         )
     }
