@@ -41,7 +41,7 @@ class SupaNewsRepositoryImpl @Inject constructor(
         return Result.success(data)
     }
 
-    override suspend fun getNewsArticle(newsId: Int): Flow<ResponseState<NewsArticleDto>> = flow {
+    override fun getNewsArticle(newsId: Int): Flow<ResponseState<NewsArticleDto>> = flow {
         emit(ResponseState.Loading)
         try {
             emit(

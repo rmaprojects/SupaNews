@@ -5,6 +5,7 @@ import com.rmaprojects.newssupabaseapp.domain.usecases.auth.LoginUseCase
 import com.rmaprojects.newssupabaseapp.domain.usecases.auth.RegisterUseCase
 import com.rmaprojects.newssupabaseapp.domain.usecases.newsfeed.AddNewNews
 import com.rmaprojects.newssupabaseapp.domain.usecases.newsfeed.NewsFeedUseCases
+import com.rmaprojects.newssupabaseapp.domain.usecases.newsread.FetchNewsUseCase
 import javax.inject.Inject
 
 data class SupaNewsUseCasesImpl @Inject constructor(
@@ -18,4 +19,6 @@ data class SupaNewsUseCasesImpl @Inject constructor(
         get() = AddNewNews(repository)
     override val newsFeedUseCases: NewsFeedUseCases
         get() = NewsFeedUseCases(repository)
+    override val fetchNewsUseCase: FetchNewsUseCase
+        get() = FetchNewsUseCase(repository)
 }

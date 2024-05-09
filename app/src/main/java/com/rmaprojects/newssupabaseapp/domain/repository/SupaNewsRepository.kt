@@ -21,6 +21,6 @@ interface SupaNewsRepository {
     fun insertNews(news: NewsEntity): Flow<ResponseState<Boolean>>
 
     suspend fun unsubscribeNewsFeedChannel()
-    suspend fun getNewsArticle(newsId: Int): Flow<ResponseState<NewsArticleDto>>
+    fun getNewsArticle(newsId: Int): Flow<ResponseState<NewsArticleDto>>
     suspend fun unsubscribeNewsDetailChannel()
 }
